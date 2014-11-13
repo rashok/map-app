@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Food Trucks of San Francisco</title>
+
+    <link href="../../../public/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../../public/bower_components/bootstrap/dist/css/modern-business.css" rel="stylesheet">
+    <link href="../../../public/bower_components/font-awesome-4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="../../../public/bower_components/leaflet.markercluster/dist/MarkerCluster.css"/>
+    <link rel="stylesheet" href="../../../public/bower_components/leaflet.markercluster/dist/MarkerCluster.Default.css"/>
+
+    <script src='https://api.tiles.mapbox.com/mapbox.js/v2.1.4/mapbox.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox.js/v2.1.4/mapbox.css' rel='stylesheet' />
+    <script src="../../../public/bower_components/leaflet.markercluster/dist/leaflet.markercluster-src.js"></script>
+
+
+
+    <style>
+        #map { height: 600px; }
+        html, body, #map-canvas { height: 600px; margin: 0; padding: 0;}
+    </style>
+
+</head>
+
+<body>
+
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <a class="navbar-brand" href="index.html">SF Food Trucks</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container" style="padding-top: 35px">
+
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">
+                <small>Find Your Favorite</small>
+            </h1>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div id="custom-search-input">
+                <div class="input-group col-md-6">
+                    <input type="text" class="typeahead search-query form-control" placeholder="Search" />
+                        <span class="input-group-btn">
+                            <button class="btn btn-danger" type="button">
+                                <span class="glyphicon glyphicon-search"></span>
+                            </button>
+                        </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default text-center">
+                <div class="panel-heading">Map of SF
+                </div>
+                <div class="panel-body">
+                    <div id="map"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <footer>
+        <div class="row">
+            <div class="col-lg-12">
+                <p>Copyright &copy; Raghuram Ashok 2014</p>
+            </div>
+        </div>
+    </footer>
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="../../../public/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+
+
+
+<script>
+
+    // Provide your access token
+    L.mapbox.accessToken = 'pk.eyJ1IjoicmFzaG9rIiwiYSI6ImJlVnM1SUEifQ.nx3UWe3BhL9MI0CYZyWXHg';
+
+    // Create a map in the div #map
+    var map = L.mapbox.map('map', 'rashok.k6h7bm00');
+
+    // initialize the map on the "map" div with a given center and zoom
+    map.setView([37.79014, -122.39865], 13);
+
+    $(document).ready(function () {
+        var locations = [];
+
+        $.ajax({
+            url: "@{Application.initializeMap()}",
+            type: "GET",
+            success: function (data, textStatus, jqXHR) {
+                console.log(data);
+                $.each(data.truckModelList, function(i, obj) {
+                    locations.push([
+                        obj.applicant,
+                        obj.address,
+                        obj.fooditems,
+                        obj.facilitytype,
+                        obj.locationdescription,
+                        obj.latitude,
+                        obj.longitude]);
+                });
+
+                var markers = L.markerClusterGroup();
+
+                for (var i = 0; i < locations.length; i++) {
+                    var a = locations[i];
+                    var title = a[0];
+                    console.log ('Processing Location - ' + i + ' . Lat - ' + a[5] + ' ;Long - ' + a[6]);
+                    var marker = L.marker(new L.LatLng(a[5], a[6]), { title: title });
+                    marker.bindPopup(title);
+                    markers.addLayer(marker);
+                }
+                map.addLayer(markers);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+            }
+        });
+    });
+
+
+
+</script>
+
+</body>
+
+</html>
