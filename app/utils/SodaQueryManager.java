@@ -13,7 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by rashok on 11/13/14.
+ * Query Manager class to perform search query on the remote data set
+ * via the Socrata API.
  */
 public class SodaQueryManager {
 

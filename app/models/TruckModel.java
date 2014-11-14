@@ -6,6 +6,9 @@ import org.codehaus.jackson.annotate.JsonProperty;
 
 import java.util.List;
 
+/**
+ * Simple POJO or Model class to store the attributes of a Food Truck
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TruckModel {
 

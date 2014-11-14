@@ -22,12 +22,25 @@
     <script src="../../../public/bower_components/leaflet/dist/spin.min.js"></script>
     <link href='https://api.tiles.mapbox.com/mapbox.js/v2.1.4/mapbox.css' rel='stylesheet' />
     <script src="../../../public/bower_components/leaflet.markercluster/dist/leaflet.markercluster-src.js"></script>
-
+    <link rel="stylesheet" href="../../../public/bower_components/Leaflet.awesome-markers/dist/leaflet.awesome-markers.css">
 
 
     <style>
         #map { height: 600px; }
         html, body { height: 600px; margin: 0; padding: 0;}
+    </style>
+
+    <style>
+        .legend label,
+        .legend span {
+            display:block;
+            float:left;
+            height:15px;
+            width:20%;
+            text-align:center;
+            font-size:14px;
+            color:#808080;
+        }
     </style>
 
 </head>
@@ -71,6 +84,12 @@
 
     <br>
 
+    <div id='legend' style='display:none'>
+        <nav class='legend clearfix'>
+            <div class="result"></div>
+        </nav>
+    </div>
+
     <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-default text-center">
@@ -99,15 +118,12 @@
 <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="../../../public/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="../../../public/bower_components/Leaflet.awesome-markers/dist/leaflet.awesome-markers.js"></script>
 
-
-
-
-<script>
-
-
+    <script>
     L.mapbox.accessToken = '${controllers.AppConstants.MAP_API_KEY}';
     var map = L.mapbox.map('map', '${controllers.AppConstants.MAP_ID}');
+    map.legendControl.addLegend(document.getElementById('legend').innerHTML);
 
     var marker = new Array();
     var markersCluster = new L.MarkerClusterGroup({
@@ -116,9 +132,10 @@
         showCoverageOnHover: false,
         zoomToBoundsOnClick: true});
 
-
-    // initialize the map on the "map" div with a given center and zoom
-    map.setView([37.755745,-122.444], 12);
+    var coffeeIcon= L.AwesomeMarkers.icon({
+        icon: 'coffee',
+        markerColor: 'red'
+    });
 
     //Initialize the map on load
     $(document).ready(function () {
@@ -140,6 +157,12 @@
             },
             success: function (data, textStatus, jqXHR) {
                 console.log(data);
+                if (data.size > 0) {
+                    $('.result').text('Found - ' + data.size + ' trucks.')
+                } else {
+                    $('.result').text('No Trucks found.')
+                }
+
                 $.each(data.truckModelList, function(i, obj) {
                     locations.push([
                         obj.applicant,
@@ -153,7 +176,11 @@
                 for (var i = 0; i < locations.length; i++) {
                     var a = locations[i];
                     var title = '<b>' + a[0] + '</b><br/>' + a[2];
-                    var mapMarker = L.marker(new L.LatLng(a[5], a[6]), { title: title});
+                    var mapMarker = L.marker(new L.LatLng(a[5], a[6]), { title: title, icon: coffeeIcon});
+                    mapMarker.setIcon(L.mapbox.marker.icon({
+                        'marker-color': '#ff8888',
+                        'marker-size': 'small',
+                    }));
                     marker.push(mapMarker);
                     mapMarker.bindPopup(title);
                     markersCluster.addLayer(marker[i]);
