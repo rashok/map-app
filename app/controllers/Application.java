@@ -1,16 +1,13 @@
 package controllers;
 
-import com.socrata.api.Soda2Consumer;
-import com.socrata.builders.SoqlQueryBuilder;
-import com.socrata.exceptions.SodaError;
-import com.socrata.model.soql.SoqlQuery;
 import models.FoodResults;
 import models.TruckModel;
+import org.apache.commons.lang.StringUtils;
 import play.cache.Cache;
 import play.mvc.Controller;
-import utils.SodaConnection;
+import utils.SodaQueryManager;
 
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Application extends Controller {
@@ -19,34 +16,38 @@ public class Application extends Controller {
         render();
     }
 
-    public static void initializeMap() {
-        List<TruckModel> locations = (List<TruckModel>) Cache.get("init-map");
-        if (locations == null) {
-            Soda2Consumer consumer = null;
-            try {
-                consumer = SodaConnection.getConsumer();
-                SoqlQuery query = new SoqlQueryBuilder()
-                        .addSelectPhrase("objectid")
-                        .addSelectPhrase("applicant")
-                        .addSelectPhrase("address")
-                        .addSelectPhrase("fooditems")
-                        .addSelectPhrase("latitude")
-                        .addSelectPhrase("longitude")
-                        .addSelectPhrase("facilitytype")
-                        .addSelectPhrase("locationdescription")
-                        .setWhereClause("status='Approved' and latitude is not null and longitude is not null")
-                        .build();
+    public static void trucks(String q) {
+        if (StringUtils.isEmpty(q)) {
+            return;
+        }
 
-                locations = consumer.query("rqzj-sfat", query, TruckModel.LIST_TYPE);
+        List<TruckModel> locations = getTruckListing(q);
+        FoodResults results = new FoodResults();
+        results.size = locations.size();
+        results.truckModelList = locations;
+        renderJSON(results);
+    }
+
+    private static List<TruckModel> getTruckListing(String searchStr) {
+        List<TruckModel> locations = new ArrayList<TruckModel>();
+        boolean isInit = false;
+        if (searchStr == null) {
+            isInit = true;
+            locations = (List<TruckModel>) Cache.get("init-map");
+        }
+
+        if (locations == null || locations.size() == 0) {
+            SodaQueryManager mgr = new SodaQueryManager();
+            locations = mgr.searchFoodTrucks(searchStr);
+            if (isInit) {
                 Cache.set("init-map", locations);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (SodaError sodaError) {
-                sodaError.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
             }
         }
+        return locations;
+    }
+
+    public static void initializeMap() {
+        List<TruckModel> locations = getTruckListing(null);
         FoodResults results = new FoodResults();
         results.size = locations.size();
         results.truckModelList = locations;

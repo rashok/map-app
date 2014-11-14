@@ -15,6 +15,7 @@ public class TruckModel {
     String address;
     String fooditems;
     String longitude;
+    String status;
     String facilitytype;
     String locationdescription;
 
@@ -24,6 +25,7 @@ public class TruckModel {
             @JsonProperty("objectid") String objectid,
             @JsonProperty("latitude") String latitude,
             @JsonProperty("address") String address,
+            @JsonProperty("status") String status,
             @JsonProperty("fooditems") String fooditems,
             @JsonProperty("longitude") String longitude,
             @JsonProperty("locationdescription") String locationdescription,
@@ -36,6 +38,7 @@ public class TruckModel {
         this.fooditems = fooditems;
         this.longitude = longitude;
         this.facilitytype = facilitytype;
+        this.status = status;
         this.locationdescription = locationdescription;
     }
 
@@ -47,5 +50,15 @@ public class TruckModel {
     @JsonProperty("latitude")
     public String getLatitude() {
         return latitude;
+    }
+
+    @JsonProperty("longitude")
+    public String getLongitude() {
+        return longitude;
+    }
+
+    @JsonProperty("status")
+    public String getStatus() {
+        return status;
     }
 }

@@ -5,6 +5,7 @@
 # Home page
 GET     /                                        Application.index
 GET     /map                                     Application.initializeMap
+GET     /map/trucks                              Application.trucks
 
 # Ignore favicon requests
 GET     /favicon.ico                            404

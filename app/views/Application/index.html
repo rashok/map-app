@@ -18,6 +18,8 @@
     <link rel="stylesheet" href="../../../public/bower_components/leaflet.markercluster/dist/MarkerCluster.Default.css"/>
 
     <script src='https://api.tiles.mapbox.com/mapbox.js/v2.1.4/mapbox.js'></script>
+    <script src="../../../public/bower_components/leaflet/dist/leaflet.spin.js"></script>
+    <script src="../../../public/bower_components/leaflet/dist/spin.min.js"></script>
     <link href='https://api.tiles.mapbox.com/mapbox.js/v2.1.4/mapbox.css' rel='stylesheet' />
     <script src="../../../public/bower_components/leaflet.markercluster/dist/leaflet.markercluster-src.js"></script>
 
@@ -25,7 +27,7 @@
 
     <style>
         #map { height: 600px; }
-        html, body, #map-canvas { height: 600px; margin: 0; padding: 0;}
+        html, body { height: 600px; margin: 0; padding: 0;}
     </style>
 
 </head>
@@ -46,7 +48,7 @@
     <div class="row">
         <div class="col-lg-12">
             <h1 class="page-header">
-                <small>Find Your Favorite</small>
+                <small>Find Your Favorite Truck</small>
             </h1>
         </div>
     </div>
@@ -54,17 +56,19 @@
     <div class="container">
         <div class="row">
             <div id="custom-search-input">
-                <div class="input-group col-md-6">
-                    <input type="text" class="typeahead search-query form-control" placeholder="Search" />
+                <form id="search" class="input-group col-md-6">
+                    <input type="text" class="search-query form-control" placeholder="Search Food Items" />
                         <span class="input-group-btn">
-                            <button class="btn btn-danger" type="button">
+                            <button class="btn btn-danger" type="submit">
                                 <span class="glyphicon glyphicon-search"></span>
                             </button>
                         </span>
-                </div>
+                </form>
             </div>
         </div>
     </div>
+
+
     <br>
 
     <div class="row">
@@ -101,21 +105,39 @@
 
 <script>
 
-    // Provide your access token
-    L.mapbox.accessToken = 'pk.eyJ1IjoicmFzaG9rIiwiYSI6ImJlVnM1SUEifQ.nx3UWe3BhL9MI0CYZyWXHg';
 
-    // Create a map in the div #map
-    var map = L.mapbox.map('map', 'rashok.k6h7bm00');
+    L.mapbox.accessToken = '${controllers.AppConstants.MAP_API_KEY}';
+    var map = L.mapbox.map('map', '${controllers.AppConstants.MAP_ID}');
+
+    var marker = new Array();
+    var markersCluster = new L.MarkerClusterGroup({
+        maxClusterRadius: 40,
+        spiderfyOnMaxZoom: true,
+        showCoverageOnHover: false,
+        zoomToBoundsOnClick: true});
+
 
     // initialize the map on the "map" div with a given center and zoom
-    map.setView([37.79014, -122.39865], 13);
+    map.setView([37.755745,-122.444], 12);
 
+    //Initialize the map on load
     $(document).ready(function () {
-        var locations = [];
+        renderLocations("@{Application.initializeMap()}")
+    });
 
+    //Query the data source url and render the geo location information on the map.
+    function renderLocations (dataUrl) {
+        var locations = [];
         $.ajax({
-            url: "@{Application.initializeMap()}",
+            url: dataUrl,
             type: "GET",
+            beforeSend: function() {
+                map.setView([37.755745,-122.444], 12);
+                map.spin(true);
+                markersCluster.removeLayers(marker);
+                markersCluster.clearLayers();
+                map.removeLayer(markersCluster);
+            },
             success: function (data, textStatus, jqXHR) {
                 console.log(data);
                 $.each(data.truckModelList, function(i, obj) {
@@ -128,24 +150,36 @@
                         obj.latitude,
                         obj.longitude]);
                 });
-
-                var markers = L.markerClusterGroup();
-
                 for (var i = 0; i < locations.length; i++) {
                     var a = locations[i];
-                    var title = a[0];
-                    console.log ('Processing Location - ' + i + ' . Lat - ' + a[5] + ' ;Long - ' + a[6]);
-                    var marker = L.marker(new L.LatLng(a[5], a[6]), { title: title });
-                    marker.bindPopup(title);
-                    markers.addLayer(marker);
+                    var title = '<b>' + a[0] + '</b><br/>' + a[2];
+                    var mapMarker = L.marker(new L.LatLng(a[5], a[6]), { title: title});
+                    marker.push(mapMarker);
+                    mapMarker.bindPopup(title);
+                    markersCluster.addLayer(marker[i]);
                 }
-                map.addLayer(markers);
+                map.addLayer(markersCluster);
+                map.spin(false);
             },
             error: function (jqXHR, textStatus, errorThrown) {
+                map.spin(false);
             }
         });
-    });
+    }
 
+
+
+    $("#search").submit(function(event) {
+        event.preventDefault();
+        var query = $.trim($(".search-query").val());
+        if (query != '') {
+            var url = "@{Application.trucks()}" + '?q=' + query;
+            renderLocations(url);
+        } else {
+            $(".search-query").val('');
+        }
+
+    });
 
 
 </script>
