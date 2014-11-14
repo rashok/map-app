@@ -50,13 +50,21 @@ This app has been deployed on Heroku. You can test it [here](https://evening-esc
 
 **Implementation**
 
-The app currently loads up with all the available (approved food trucks) truck locations. The search will only search on the food item description provided by each truck business. Here is a list of improvements I'd like to work on and improve the usability of the app.
+The implementation is a full stack solution. The app currently loads up with all the available (approved food trucks) truck locations. The search will only search on the food item description provided by each truck business. Here is a list of improvements I'd like to work on and improve the usability of the app.
 
-> **Further Improvements:**
+*Further Improvements:*
 
-> - Categorizing trucks by some sort of characteristic - cold truck, deli, hot food, coffee, beverages etc or a mix of them. The pop-up panel could have icons instead of textual description.
-> - Search by Zip Code
-> - Investigate possibility of integrating with Foursquare or Instagram to load statistics of customer visits, rating, tips and photos of popular items.
-> - Result Set Caching and Fetching by Page.
-> - LIKE queries cannot be performed using Socrata API. Hence, I made use of a full text search which may not return relevant results as it searches across the entire dataset. Another option is to export this dataset
-into a postgresdb and run full text indexing or perform 'LIKE' queries.
+1. LIKE queries cannot be performed using Socrata API. Hence, I made use of a full text search which may not return relevant results as it searches across the entire dataset. Another option is to export this dataset
+    into a postgresdb and run full text indexing or perform 'LIKE' queries. If the dataset is very big, I would use Solr or Lucene for the search indexing.
+2.  Categorizing trucks by some sort of characteristic - cold truck, deli, hot food, coffee, beverages etc or a mix of them. The pop-up panel could have icons instead of textual description.
+3.  Search by Zip Code
+4.  Investigate possibility of integrating with Foursquare or Instagram to load statistics of customer visits, rating, tips and photos of popular items.
+5.  Result Set Caching and Fetching by Page.
+
+If given more time, I will scale up the search by incorporating a back end data store with indexing so that the searches are relevant.
+
+
+**About**
+
+Designed and Developed by Raghuram Ashok
+[Linked In Profile](www.linkedin.com/in/raghuramashok)
