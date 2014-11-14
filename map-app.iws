@@ -2,30 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4010dfb0-3a95-47ad-97e3-fe0c692a8f8c" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/controllers/AppConstants.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/utils/SodaQueryManager.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/tmp/bytecode/DEV/_app_views_errors_404.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/tmp/bytecode/DEV/_play__framework_templates_errors_404.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/tmp/bytecode/DEV/_play__framework_templates_tags_404.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/tmp/bytecode/DEV/models.Truck" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/tmp/bytecode/DEV/models.Truck$1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/tmp/classes/models/Truck$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/tmp/classes/models/Truck.class" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tmp/classes/controllers/Application.class" afterPath="$PROJECT_DIR$/tmp/classes/controllers/Application.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tmp/classes/production/map-app/controllers/Application.class" afterPath="$PROJECT_DIR$/tmp/classes/production/map-app/controllers/Application.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tmp/bytecode/DEV/controllers.Application" afterPath="$PROJECT_DIR$/tmp/bytecode/DEV/controllers.Application" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/controllers/Application.java" afterPath="$PROJECT_DIR$/app/controllers/Application.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/models/TruckModel.java" afterPath="$PROJECT_DIR$/app/models/TruckModel.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tmp/bytecode/DEV/_app_views_Application_index.html" afterPath="$PROJECT_DIR$/tmp/bytecode/DEV/_app_views_Application_index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tmp/bytecode/DEV/_app_views_errors_500.html" afterPath="$PROJECT_DIR$/tmp/bytecode/DEV/_app_views_errors_500.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tmp/bytecode/DEV/_play__framework_templates_tags_500.html" afterPath="$PROJECT_DIR$/tmp/bytecode/DEV/_play__framework_templates_tags_500.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/conf/application.conf" afterPath="$PROJECT_DIR$/conf/application.conf" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/conf/dependencies.yml" afterPath="$PROJECT_DIR$/conf/dependencies.yml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/views/Application/index.html" afterPath="$PROJECT_DIR$/app/views/Application/index.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tmp/classes/production/map-app/views/Application/index.html" afterPath="$PROJECT_DIR$/tmp/classes/production/map-app/views/Application/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/map-app.iml" afterPath="$PROJECT_DIR$/map-app.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/map-app.iws" afterPath="$PROJECT_DIR$/map-app.iws" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/conf/routes" afterPath="$PROJECT_DIR$/conf/routes" />
     </list>
     <ignored path="map-app.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -703,6 +683,8 @@
     <option name="myTodoPanelSettings">
       <TodoPanelSettings />
     </option>
+    <MESSAGE value="Added clear layer logic" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added clear layer logic" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
